@@ -12,6 +12,11 @@ string connection = builder.Configuration.GetConnectionString("DbConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(connection));
 
+builder.Services.AddHttpsRedirection(options => 
+{
+    options.HttpsPort = 44342;
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
