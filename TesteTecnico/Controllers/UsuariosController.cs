@@ -57,14 +57,30 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Usuario>> ListarUsuarios()
+    public ActionResult<IEnumerable<dynamic>> ListarUsuarios()
     {
-        var usuarios = _context.Usuarios.ToList();
+        var usuarios = _context.Usuarios.Include(u => u.Escolaridade).ToList();
         
         if (usuarios is null)
             return NotFound("Nenhum usuário cadastrado.");
 
-        return usuarios;
+        List<dynamic> usuariosJson = new List<dynamic>();
+
+        foreach (var usuario in usuarios)
+        {
+            usuariosJson.Add(new
+            {
+                idUsuario = usuario.IdUsuario,
+                nome = usuario.Nome,
+                sobrenome = usuario.Sobrenome,
+                email = usuario.Email,
+                dataNascimento = usuario.DataNascimento.ToShortDateString(),
+                idEscolaridade = usuario.IdEscolaridade,
+                escolaridade = usuario.Escolaridade?.NomeEscolaridade
+            });
+        }
+
+        return usuariosJson;
     }
 
     [HttpDelete("{id:int}")]

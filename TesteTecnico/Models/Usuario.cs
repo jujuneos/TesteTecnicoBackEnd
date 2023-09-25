@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TesteTecnico.Models;
 
@@ -26,4 +27,7 @@ public class Usuario
 
     [Required(ErrorMessage = "É necessário informar uma escolaridade.")]
     public int IdEscolaridade { get; set; }
+
+    [ForeignKey("IdEscolaridade")]
+    public Escolaridade? Escolaridade { get; set; }
 }
